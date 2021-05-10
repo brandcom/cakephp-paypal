@@ -2,6 +2,13 @@
 
 ## Installation and Usage
 
+Install the Plugin
+
+```
+composer require jbennecker/cakephp-paypal
+```
+
+
 Load the Plugin
 
 ```
@@ -67,8 +74,8 @@ PayPal will send an IPN to the Plugin. Make sure you have IPN enabled in you acc
 validated, the Plugin calls an Callbackmethod on your OrdersTable class.
 
 ```
-    public function afterPayment(Order $order): void
-    {
-        // Further process the order
-    }
+public function afterPayment(Order $order): void
+{
+    // Further process the order
+}
 ```
