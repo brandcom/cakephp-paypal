@@ -1,0 +1,19 @@
+{
+    "name": "jbennecker/cakephp-paypal",
+    "description": "PayPal plugin for CakePHP.",
+    "type": "cakephp-plugin",
+    "license": "MIT",
+    "require": {
+        "php": "^7.4",
+        "cakephp/cakephp": "^3.0",
+        "cakephp/plugin-installer": "*"
+    },
+    "require-dev": {
+        "cakephp/migrations": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "PayPal\\": "src/"
+        }
+    }
+}
