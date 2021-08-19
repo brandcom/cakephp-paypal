@@ -16,10 +16,9 @@ class PaypalsController extends AppController
     public function initialize(): void
     {
         parent::initialize();
-        $this->Auth->allow();
-        $this->Security->setConfig('unlockedActions', ['ipnHandler']);
+        $this->Authentication->allowUnauthenticated(['pay', 'ipnHandler']);
+        $this->FormProtection->setConfig('unlockedActions', ['ipnHandler']);
         $this->loadModel('Orders');
-
         if (!$this->Orders instanceof OrdersTableInterface) {
             throw new \Exception('OrdersTable must implement \PayPal\Model\TableOrdersTableInterface');
         }
@@ -30,7 +29,7 @@ class PaypalsController extends AppController
      *
      * @link https://developer.paypal.com/docs/paypal-payments-standard/integration-guide/formbasics/#
      */
-    public function pay(int $orderId)
+    public function pay($orderId = null)
     {
         $order = $this->Orders->findById($orderId)->find('contained')->first();
         if (!$order) {

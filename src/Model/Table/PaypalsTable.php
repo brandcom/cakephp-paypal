@@ -20,7 +20,7 @@ class PaypalsTable extends Table
     const SANDBOX_VERIFY_URI = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
     const VERIFY_URI = 'https://ipnpb.paypal.com/cgi-bin/webscr';
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
 
@@ -31,7 +31,7 @@ class PaypalsTable extends Table
         $this->addBehavior('Timestamp');
     }
 
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->scalar('id')
