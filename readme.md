@@ -1,4 +1,4 @@
-# PayPal Plugin for Cakephp 3
+# PayPal Plugin for Cakephp 4.x
 
 ## Installation and Usage
 
