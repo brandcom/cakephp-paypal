@@ -13,7 +13,7 @@ use PayPal\Model\Table\PaypalsTable;
  */
 class PaypalsController extends AppController
 {
-    public function initialize()
+    public function initialize(): void
     {
         parent::initialize();
         $this->Auth->allow();
