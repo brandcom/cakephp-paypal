@@ -7,6 +7,7 @@ use Cake\Event\Event;
 use Cake\Log\Log;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
+use PayPal\Model\Entity\OrderInterface;
 use PayPal\Model\Entity\Paypal;
 
 class PaypalsTable extends Table
@@ -141,19 +142,15 @@ class PaypalsTable extends Table
      * Check that the payment_status is Completed.
      * Check that the receiver_email is an email address registered in out PayPal account.
      * Check that the price (carried in mc_gross) and the currency (carried in mc_currency) are correct.
-     *
-     * @param array $ipn
-     * @param Order $order
-     * @return bool
      */
-    public function isLegitimate(array $ipn): bool
+    public function isLegitimate(array $ipn, OrderInterface $order): bool
     {
         if (!in_array($ipn['payment_status'], ['Completed'])) {
             Log::debug('inlegitimate payment status');
             return false;
         }
 
-        if ($ipn['receiver_email'] != Configure::read('PayPal.receiverEmail')) {
+        if ($ipn['receiver_email'] != $order->getPayPalReceiverEmail()) {
             Log::debug('inlegitimate receiver_email');
             return false;
         }

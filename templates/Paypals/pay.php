@@ -15,7 +15,7 @@ $this->assign('title', __('Sie werden jetzt zu Paypal weitergeleitet'));
 <form action="<?= $formAction ?>" id="paypalForm" method="post" target="_top">
     <input TYPE="hidden" name="cmd" value="_xclick">
     <?= $this->Form->control('business', [
-        'value' => Configure::read('PayPal.receiverEmail'),
+        'value' => $order->getPayPalReceiverEmail(),
         'type' => 'hidden'
     ]) ?>
     <?= $this->Form->control(
