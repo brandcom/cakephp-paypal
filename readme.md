@@ -29,7 +29,6 @@ Add a file called `app_paypal.php` to your config folder and enter the following
 return [
     'PayPal' => [
         'currency' => 'EUR',
-        'receiverEmail' => '', // enter your paypal account email here
     ],
 ];
 ```

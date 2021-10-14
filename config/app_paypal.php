@@ -3,6 +3,5 @@
 return [
     'PayPal' => [
         'currency' => 'EUR',
-        'receiverEmail' => '',
     ],
 ];
