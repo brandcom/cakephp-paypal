@@ -73,7 +73,10 @@ class PaypalsController extends AppController
 
         // After we have authenticated an IPN message (received a VERIFIED response from PayPal),
         // we must perform additional checks before we can assume that the IPN is legitimate.
-        $order = $this->Orders->findById($this->request->getData('custom'))->first();
+        $order = $this->Orders
+            ->find('contained')
+            ->findById($this->request->getData('custom'))
+            ->first();
         if (!$order) {
             throw new \Exception('Order not found');
         }
