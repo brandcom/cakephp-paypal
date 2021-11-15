@@ -51,6 +51,7 @@ class PaypalsController extends AppController
      * We validate the notification, mark order as paid and queue exports.
      *
      * A list of variables is available here:
+     *
      * @link https://developer.paypal.com/webapps/developer/docs/classic/ipn/integration-guide/IPNandPDTVariables/
      *
      * @link https://developer.paypal.com/docs/paypal-payments-standard/integration-guide/formbasics/#instant-payment-notification--notify_url
@@ -75,7 +76,9 @@ class PaypalsController extends AppController
         // we must perform additional checks before we can assume that the IPN is legitimate.
         $order = $this->Orders
             ->find('contained')
-            ->findById($this->request->getData('custom'))
+            ->where([
+                'Orders.id' => $this->request->getData('custom'),
+            ])
             ->first();
         if (!$order) {
             throw new \Exception('Order not found');
