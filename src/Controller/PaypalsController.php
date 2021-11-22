@@ -62,14 +62,16 @@ class PaypalsController extends AppController
 
         $verified = $this->Paypals->verifyIPN();
         if (!$verified) {
-            throw new \Exception('IPN could not be verified');
+            Log::debug('IPN could not be verified');
+            $this->exit();
         }
         Log::debug('is verified');
 
         // Check the txn_id to make sure the IPN is not a duplicate.
         $paypal = $this->Paypals->findById($this->request->getData('txn_id'))->first();
         if ($paypal) {
-            throw new \Exception('IPN message is a duplicate.');
+            Log::debug('IPN message is a duplicate.');
+            $this->exit();
         }
 
         // After we have authenticated an IPN message (received a VERIFIED response from PayPal),
@@ -81,11 +83,13 @@ class PaypalsController extends AppController
             ])
             ->first();
         if (!$order) {
-            throw new \Exception('Order not found');
+            Log::debug('Order not found');
+            $this->exit();
         }
         $isLegitimate = $this->Paypals->isLegitimate($this->request->getData(), $order);
         if (!$isLegitimate) {
-            throw new \Exception('IPN is not legitimate');
+            Log::debug('IPN is not legitimate.');
+            $this->exit();
         }
         Log::debug('IPN is legitimate');
 
@@ -98,14 +102,20 @@ class PaypalsController extends AppController
         Log::debug('Paypal data for db: ' . print_r($data, true));
         $paypal = $this->Paypals->newEntity($data);
         if (!$this->Paypals->save($paypal)) {
-            throw new \Exception('The IPN could not be saved.');
+            Log::debug('Could not save IPN to database');
+            $this->exit();
         }
 
         Log::debug('The Payment has been saved.');
-
         $this->Orders->afterPayment($order);
+        $this->exit();
+    }
 
-        // Reply with an empty 200 response to indicate to paypal the IPN was received correctly.
+    /**
+     * Reply with an empty 200 response to indicate to paypal the IPN was received correctly.
+     */
+    private function exit(): void
+    {
         header("HTTP/1.1 200 OK");
         exit();
     }
