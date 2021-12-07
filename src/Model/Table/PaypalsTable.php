@@ -1,14 +1,11 @@
 <?php
 namespace PayPal\Model\Table;
 
-use App\Model\Entity\Order;
 use Cake\Core\Configure;
-use Cake\Event\Event;
 use Cake\Log\Log;
 use Cake\ORM\Table;
 use Cake\Validation\Validator;
-use PayPal\Model\Entity\OrderInterface;
-use PayPal\Model\Entity\Paypal;
+use PayPal\Model\Entity\PaypalEntityInterface;
 
 class PaypalsTable extends Table
 {
@@ -18,10 +15,10 @@ class PaypalsTable extends Table
     const SANDBOX_FORM_ACTION = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
     const FORM_ACTION = 'https://www.paypal.com/cgi-bin/webscr';
 
-    const SANDBOX_VERIFY_URI = 'https://ipnpb.sandbox.paypal.com/cgi-bin/webscr';
+    const SANDBOX_VERIFY_URI = 'https://www.sandbox.paypal.com/cgi-bin/webscr';
     const VERIFY_URI = 'https://ipnpb.paypal.com/cgi-bin/webscr';
 
-    public function initialize(array $config)
+    public function initialize(array $config): void
     {
         parent::initialize($config);
 
@@ -32,12 +29,17 @@ class PaypalsTable extends Table
         $this->addBehavior('Timestamp');
     }
 
-    public function validationDefault(Validator $validator)
+    public function validationDefault(Validator $validator): Validator
     {
         $validator
             ->scalar('id')
             ->maxLength('id', 255)
             ->allowEmptyString('id', null, 'create');
+
+        $validator
+            ->scalar('fk_model')
+            ->maxLength('fk_model', 255)
+            ->notEmptyString('fk_model');
 
         $validator
             ->scalar('data')
@@ -95,7 +97,10 @@ class PaypalsTable extends Table
         $http_code = $info['http_code'];
 
         if ($http_code != 200) {
-            throw new \Exception("PayPal responded with http code $http_code");
+            Log::debug('IPN not verified');
+            Log::debug("PayPal responded with http code $http_code");
+            Log::debug(print_r($res, true));
+            return false;
         }
 
         if (!($res)) {
@@ -143,7 +148,7 @@ class PaypalsTable extends Table
      * Check that the receiver_email is an email address registered in out PayPal account.
      * Check that the price (carried in mc_gross) and the currency (carried in mc_currency) are correct.
      */
-    public function isLegitimate(array $ipn, OrderInterface $order): bool
+    public function isLegitimate(array $ipn, PaypalEntityInterface $order): bool
     {
         if (!in_array($ipn['payment_status'], ['Completed'])) {
             Log::debug('inlegitimate payment status');

@@ -1,7 +1,9 @@
 <?php
 /**
  * @var \Cake\View\View $this
- * @var \PayPal\Model\Entity\OrderInterface $order
+ * @var \PayPal\Model\Entity\PaypalEntityInterface $order
+ * @var array $return
+ * @var string $custom
  * @var string $formAction
  */
 
@@ -31,9 +33,9 @@ $this->assign('title', __('Sie werden jetzt zu Paypal weitergeleitet'));
         'type' => 'hidden'
     ]) ?>
     <?= $this->Form->control('email', ['value' => $order->getPayPalPayerEmail(), 'type' => 'hidden']) ?>
-    <?= $this->Form->control('custom', ['value' => $order->id, 'type' => 'hidden']) ?>
+    <?= $this->Form->control('custom', ['value' => $custom, 'type' => 'hidden']) ?>
     <?= $this->Form->control('return', [
-        'value' => Router::url(['plugin' => null, 'controller' => 'Orders', 'action' => 'confirm'], true),
+        'value' => Router::url($return, true),
         'type' => 'hidden',
     ]) ?>
     <?= $this->Form->control('notify_url', [

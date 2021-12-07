@@ -7,12 +7,11 @@ use Cake\ORM\Entity;
  * Paypal Entity
  *
  * @property string $id
- * @property int $order_id
+ * @property int $fk_id
+ * @property string $fk_model
  * @property string $data
  * @property \Cake\I18n\FrozenTime|null $created
  * @property \Cake\I18n\FrozenTime|null $modified
- *
- * @property \App\Model\Entity\Order $order
  */
 class Paypal extends Entity
 {
@@ -26,6 +25,11 @@ class Paypal extends Entity
      * @var array
      */
     protected $_accessible = [
-        '*' => true,
+        'id' => true,
+        'fk_id' => true,
+        'fk_model' => true,
+        'data' => true,
+        'created' => true,
+        'modified' => true,
     ];
 }

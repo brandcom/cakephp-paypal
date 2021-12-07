@@ -33,47 +33,51 @@ return [
 ];
 ```
 
-The Plugin expects that you have a table called orders and the corresponding entity and table classes. The Order Entity
-class must implement the PayPal OrderInterface
+Your Table must implement our \PayPal\Model\Table\PaypalTableInterface and
+your Entity must implement our \PayPal\Model\Entity\PaypalEntityInterface
+
 
 ```
-use PayPal\Model\Entity\OrderInterface;
+use PayPal\Model\Entity\PaypalEntityInterface
 
-class Order extends Entity implements OrderInterface
+class Order extends Entity implements PaypalEntityInterface
 {}
 ```
 
 And OrdersTable must implement \PayPal\Model\TableOrdersTableInterface
 
 ```
-use PayPal\Model\TableOrdersTableInterface;
+use PayPal\Model\Table\PaypalTableInterface
 
-class OrdersTable extends Table implements OrdersTableInterface
+class OrdersTable extends Table implements PaypalTableInterface
 {}
 ```
 
-After you have saved an order you can redirect the user to PayPal using this:
+After you have saved an order, you can redirect the user to PayPal using this:
 
 ```
 return $this->redirect([
     'plugin' => 'PayPal',
     'controller' => 'Paypals',
     'action' => 'pay',
-    $order->id,
+    '?' => [
+        'fk_model' => 'Orders',
+        'fk_id' => $order->id,
+    ],
 ]);
 ```
 
 This will redirect your customer to PayPal. After the customer has successfully paid, he will be redirected to
 
 ```
-Router::url(['controller' => 'Orders', 'action' => 'confirm'], true);
+Router::url(['controller' => {{fk_model}}, 'action' => 'confirm'], true);
 ```
 
-PayPal will send an IPN to the Plugin. Make sure you have IPN enabled in you account settings. If the IPN successfully
-validated, the Plugin calls an Callbackmethod on your OrdersTable class.
+PayPal will send an IPN to the Plugin. Make sure you have IPN enabled in you account settings. If the IPN was successfully
+validated, the Plugin calls the afterPayment-Callback on your Table-Class.
 
 ```
-public function afterPayment(Order $order): void
+public function afterPayment(EntityInterface $order): void
 {
     // Further process the order
 }
