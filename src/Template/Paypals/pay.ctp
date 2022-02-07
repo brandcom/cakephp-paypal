@@ -34,7 +34,7 @@ $this->assign('title', __('Sie werden jetzt zu Paypal weitergeleitet'));
     ]) ?>
     <?= $this->Form->control('email', ['value' => $order->getPayPalPayerEmail(), 'type' => 'hidden']) ?>
     <?= $this->Form->control('custom', ['value' => $custom, 'type' => 'hidden']) ?>
-    <?= $this->Form->control('invoice', ['value' => '#' . $order->id, 'type' => 'hidden']) ?>
+    <?= $this->Form->control('invoice', ['value' => $order->getPayPalInvoiceNumber(), 'type' => 'hidden']) ?>
     <?= $this->Form->control('return', [
         'value' => Router::url($return, true),
         'type' => 'hidden',

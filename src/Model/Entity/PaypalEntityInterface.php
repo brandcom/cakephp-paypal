@@ -7,6 +7,8 @@ interface PaypalEntityInterface extends EntityInterface
 {
     public function getPayPalAmount(): float;
 
+    public function getPayPalInvoiceNumber(): string;
+
     public function getPayPalPayerEmail(): string;
 
     public function getPayPalReceiverEmail(): string;
