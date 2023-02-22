@@ -69,8 +69,16 @@ This will redirect your customer to PayPal. After the customer has successfully 
 Router::url(['controller' => 'Orders', 'action' => 'confirm'], true);
 ```
 
-PayPal will send an IPN to the Plugin. Make sure you have IPN enabled in you account settings. If the IPN successfully
+PayPal will send an IPN to the Plugin. If the IPN successfully
 validated, the Plugin calls an Callbackmethod on your OrdersTable class.
+
+PayPal will send an IPN to the Plugin. If the IPN was successfully
+validated, the Plugin calls the afterPayment-Callback on your Table-Class.
+
+This Plugin uses [PayPal Payments Standard](https://developer.paypal.com/api/nvp-soap/paypal-payments-standard/gs-PayPalPaymentsStandard/) 
+
+See [PayPal sandbox testing guide](https://developer.paypal.com/tools/sandbox/) for using Sandbox testing accounts.
+
 
 ```
 public function afterPayment(Order $order): void
