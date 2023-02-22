@@ -76,6 +76,10 @@ Router::url(['controller' => {{fk_model}}, 'action' => 'confirm'], true);
 PayPal will send an IPN to the Plugin. Make sure you have IPN enabled in you account settings. If the IPN was successfully
 validated, the Plugin calls the afterPayment-Callback on your Table-Class.
 
+Checkout the paypal documentation on how to enable IPN:
+
+https://developer.paypal.com/api/nvp-soap/ipn/IPNSetup/#link-settingupipnnotificationsonpaypal
+
 ```
 public function afterPayment(EntityInterface $order): void
 {
