@@ -16,7 +16,11 @@ class PaypalsController extends AppController
     public function initialize()
     {
         parent::initialize();
-        $this->Auth->allow();
+        if (property_exists($this, 'Auth')) {
+            $this->Auth->allow();
+        } elseif (property_exists($this, 'Authentication')) {
+            $this->Authentication->allowUnauthenticated(['pay', 'ipnHandler']);
+        }
         $this->Security->setConfig('unlockedActions', ['ipnHandler']);
     }
 
